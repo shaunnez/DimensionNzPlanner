@@ -450,6 +450,17 @@
             opacity: 1;
         }
 
+        /* Added CSS for selected highlight and active chip */
+        .highlight.selected {
+            filter: brightness(1.2);
+            z-index: 20;
+        }
+
+        .event-chip.active {
+            background: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 0 8px currentColor;
+        }
+
         /* ============================================
            Tooltip (Desktop)
            ============================================ */
@@ -899,7 +910,9 @@
             calibrationMode: false,
             isDragging: false,
             dragStart: null,
-            isMobile: window.matchMedia('(max-width: 768px)').matches
+            isMobile: window.matchMedia('(max-width: 768px)').matches,
+            // Track selected events for toggling
+            selectedEvents: new Set(JSON.parse(localStorage.getItem('selectedEvents') || '[]'))
         };
 
         /* ============================================
@@ -944,7 +957,7 @@
         }
 
         /* ============================================
-           Image Loading
+           Image Loading & Overlay Sync
            ============================================ */
         function loadImage(imageNum) {
             state.currentImage = imageNum;
@@ -966,6 +979,8 @@
                     elements.imageWrapper.insertBefore(existingImg, elements.overlayContainer);
                 }
                 existingImg.src = imgPath;
+                // Sync overlay size and position after image loads
+                requestAnimationFrame(syncOverlayToImage);
                 renderHighlights();
             };
             img.onerror = function() {
@@ -975,6 +990,18 @@
                 renderHighlights();
             };
             img.src = imgPath;
+        }
+
+        // Sync overlay container to match the rendered image size and position
+        function syncOverlayToImage() {
+            const img = elements.imageWrapper.querySelector('.timetable-image');
+            if (!img) return;
+            const rect = img.getBoundingClientRect();
+            const wrapperRect = elements.imageWrapper.getBoundingClientRect();
+            elements.overlayContainer.style.width = `${rect.width}px`;
+            elements.overlayContainer.style.height = `${rect.height}px`;
+            elements.overlayContainer.style.left = `${rect.left - wrapperRect.left}px`;
+            elements.overlayContainer.style.top = `${rect.top - wrapperRect.top}px`;
         }
 
         /* ============================================
@@ -1015,10 +1042,15 @@
 
                 elements.overlayContainer.appendChild(highlight);
 
-                // Trigger visibility animation
-                requestAnimationFrame(() => {
-                    highlight.classList.add('visible');
-                });
+                // Determine if this event is selected
+                const isSelected = state.selectedEvents.has(event.id);
+                if (isSelected) {
+                    // Apply selected class and trigger visibility animation
+                    highlight.classList.add('selected');
+                    requestAnimationFrame(() => {
+                        highlight.classList.add('visible');
+                    });
+                }
             });
         }
 
@@ -1046,12 +1078,17 @@
                     <span class="event-chip-day">${event.day.substring(0, 3)}</span>
                     <span>${event.name}</span>
                 `;
+                // Apply active class if selected
+                const isSelected = state.selectedEvents.has(event.id);
+                if (isSelected) {
+                    chip.classList.add('active');
+                }
                 chip.addEventListener('click', () => {
                     // Switch to correct image if needed
                     if (event.image !== state.currentImage) {
                         loadImage(event.image);
                     }
-                    handleHighlightClick(event);
+                    toggleEventSelection(event.id);
                 });
                 elements.eventList.appendChild(chip);
             });
@@ -1124,11 +1161,29 @@
             elements.modalOverlay.classList.remove('visible');
         }
 
+        // Click handler for highlights
         function handleHighlightClick(event) {
             if (state.calibrationMode) return;
+            // Toggle selection state
+            toggleEventSelection(event.id);
             if (state.isMobile) {
                 showModal(event);
             }
+        }
+
+        /* ============================================
+           Selection Toggle
+           ============================================ */
+        // Toggle selection state for event by id
+        function toggleEventSelection(id) {
+            if (state.selectedEvents.has(id)) {
+                state.selectedEvents.delete(id);
+            } else {
+                state.selectedEvents.add(id);
+            }
+            localStorage.setItem('selectedEvents', JSON.stringify([...state.selectedEvents]));
+            renderHighlights();
+            renderEventList();
         }
 
         /* ============================================
@@ -1330,6 +1385,7 @@
         // Handle resize
         window.addEventListener('resize', () => {
             state.isMobile = window.matchMedia('(max-width: 768px)').matches;
+            syncOverlayToImage();
         });
 
         // Keyboard shortcuts
