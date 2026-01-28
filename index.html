@@ -9,17 +9,21 @@
            CSS Variables & Reset
            ============================================ */
         :root {
-            --bg-dark: #0a0a0f;
-            --bg-card: #141420;
+            --bg-dark: #0a0a12;
+            --bg-card: #12121f;
             --bg-hover: #1a1a2e;
             --text-primary: #ffffff;
-            --text-secondary: #a0a0b0;
-            --neon-music: #ff00ff;
-            --neon-music-glow: rgba(255, 0, 255, 0.4);
-            --neon-activities: #00ffff;
-            --neon-activities-glow: rgba(0, 255, 255, 0.4);
+            --text-secondary: #8888aa;
+            /* Priority colors */
+            --neon-must: #ff00ff;
+            --neon-must-glow: rgba(255, 0, 255, 0.4);
+            --neon-nice: #00ffff;
+            --neon-nice-glow: rgba(0, 255, 255, 0.4);
             --neon-optional: #ffff00;
             --neon-optional-glow: rgba(255, 255, 0, 0.4);
+            /* Category colors */
+            --color-music: #ff00ff;
+            --color-activity: #00ffff;
             --border-radius: 8px;
             --transition-speed: 0.2s;
         }
@@ -53,7 +57,7 @@
             align-items: flex-start;
             flex-wrap: wrap;
             gap: 12px;
-            background: linear-gradient(to bottom, rgba(10, 10, 15, 0.95) 0%, rgba(10, 10, 15, 0.8) 80%, transparent 100%);
+            background: linear-gradient(to bottom, rgba(10, 10, 18, 0.98) 0%, rgba(10, 10, 18, 0.9) 80%, transparent 100%);
             pointer-events: none;
         }
 
@@ -61,61 +65,96 @@
             pointer-events: auto;
         }
 
-        /* Category Toggles */
-        .toggles {
+        .controls-left {
             display: flex;
+            flex-direction: column;
             gap: 8px;
-            flex-wrap: wrap;
         }
 
+        .toggle-group {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .toggle-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-secondary);
+            margin-right: 4px;
+        }
+
+        /* Toggle Buttons */
         .toggle-btn {
             display: flex;
             align-items: center;
-            gap: 6px;
-            padding: 8px 14px;
+            gap: 5px;
+            padding: 6px 12px;
             border: 2px solid;
             border-radius: var(--border-radius);
             background: var(--bg-card);
             color: var(--text-primary);
-            font-size: 14px;
+            font-size: 12px;
             font-weight: 500;
             cursor: pointer;
             transition: all var(--transition-speed) ease;
         }
 
-        .toggle-btn[data-category="music"] {
-            border-color: var(--neon-music);
+        /* Priority toggles */
+        .toggle-btn[data-priority="must"] {
+            border-color: var(--neon-must);
         }
 
-        .toggle-btn[data-category="activities"] {
-            border-color: var(--neon-activities);
+        .toggle-btn[data-priority="nice"] {
+            border-color: var(--neon-nice);
         }
 
-        .toggle-btn[data-category="optional"] {
+        .toggle-btn[data-priority="optional"] {
             border-color: var(--neon-optional);
         }
 
-        .toggle-btn.active[data-category="music"] {
-            background: var(--neon-music);
+        .toggle-btn.active[data-priority="must"] {
+            background: var(--neon-must);
             color: #000;
-            box-shadow: 0 0 20px var(--neon-music-glow);
+            box-shadow: 0 0 15px var(--neon-must-glow);
         }
 
-        .toggle-btn.active[data-category="activities"] {
-            background: var(--neon-activities);
+        .toggle-btn.active[data-priority="nice"] {
+            background: var(--neon-nice);
             color: #000;
-            box-shadow: 0 0 20px var(--neon-activities-glow);
+            box-shadow: 0 0 15px var(--neon-nice-glow);
         }
 
-        .toggle-btn.active[data-category="optional"] {
+        .toggle-btn.active[data-priority="optional"] {
             background: var(--neon-optional);
             color: #000;
-            box-shadow: 0 0 20px var(--neon-optional-glow);
+            box-shadow: 0 0 15px var(--neon-optional-glow);
+        }
+
+        /* Category toggles */
+        .toggle-btn[data-category="music"] {
+            border-color: var(--color-music);
+        }
+
+        .toggle-btn[data-category="activity"] {
+            border-color: var(--color-activity);
+        }
+
+        .toggle-btn.active[data-category="music"] {
+            background: rgba(255, 0, 255, 0.3);
+            box-shadow: 0 0 10px var(--neon-must-glow);
+        }
+
+        .toggle-btn.active[data-category="activity"] {
+            background: rgba(0, 255, 255, 0.3);
+            box-shadow: 0 0 10px var(--neon-nice-glow);
         }
 
         .toggle-indicator {
-            width: 10px;
-            height: 10px;
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
             background: currentColor;
             opacity: 0.5;
@@ -129,17 +168,23 @@
         /* Legend */
         .legend {
             display: flex;
-            gap: 12px;
-            padding: 8px 12px;
+            flex-direction: column;
+            gap: 6px;
+            padding: 10px 12px;
             background: var(--bg-card);
             border-radius: var(--border-radius);
-            font-size: 12px;
+            font-size: 11px;
+        }
+
+        .legend-row {
+            display: flex;
+            gap: 12px;
         }
 
         .legend-item {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 5px;
         }
 
         .legend-color {
@@ -148,19 +193,19 @@
             border-radius: 3px;
         }
 
-        .legend-color.music {
-            background: var(--neon-music);
-            box-shadow: 0 0 8px var(--neon-music-glow);
+        .legend-color.must {
+            background: var(--neon-must);
+            box-shadow: 0 0 6px var(--neon-must-glow);
         }
 
-        .legend-color.activities {
-            background: var(--neon-activities);
-            box-shadow: 0 0 8px var(--neon-activities-glow);
+        .legend-color.nice {
+            background: var(--neon-nice);
+            box-shadow: 0 0 6px var(--neon-nice-glow);
         }
 
         .legend-color.optional {
             background: var(--neon-optional);
-            box-shadow: 0 0 8px var(--neon-optional-glow);
+            box-shadow: 0 0 6px var(--neon-optional-glow);
         }
 
         /* ============================================
@@ -171,12 +216,12 @@
             bottom: 16px;
             right: 16px;
             z-index: 200;
-            padding: 10px 16px;
+            padding: 8px 14px;
             background: var(--bg-card);
-            border: 2px solid #666;
+            border: 2px solid #555;
             border-radius: var(--border-radius);
             color: var(--text-primary);
-            font-size: 13px;
+            font-size: 12px;
             cursor: pointer;
             transition: all var(--transition-speed);
         }
@@ -192,11 +237,11 @@
 
         .calibration-panel {
             position: fixed;
-            bottom: 60px;
+            bottom: 55px;
             right: 16px;
             z-index: 200;
-            width: 300px;
-            padding: 16px;
+            width: 280px;
+            padding: 14px;
             background: var(--bg-card);
             border: 1px solid #333;
             border-radius: var(--border-radius);
@@ -208,34 +253,35 @@
         }
 
         .calibration-panel h3 {
-            font-size: 14px;
-            margin-bottom: 12px;
+            font-size: 13px;
+            margin-bottom: 10px;
             color: #ff6600;
         }
 
         .calibration-output {
-            font-family: monospace;
-            font-size: 12px;
+            font-family: 'SF Mono', Monaco, monospace;
+            font-size: 11px;
             background: #000;
             padding: 10px;
             border-radius: 4px;
             margin-bottom: 10px;
             white-space: pre-wrap;
             word-break: break-all;
-            max-height: 150px;
+            max-height: 120px;
             overflow-y: auto;
+            color: #0f0;
         }
 
         .calibration-btn {
-            padding: 8px 12px;
+            padding: 6px 10px;
             background: #ff6600;
             border: none;
             border-radius: 4px;
             color: #000;
             font-weight: 500;
             cursor: pointer;
-            margin-right: 8px;
-            font-size: 12px;
+            margin-right: 6px;
+            font-size: 11px;
         }
 
         .calibration-btn:hover {
@@ -283,39 +329,46 @@
            Main Image Container
            ============================================ */
         .main-container {
-            padding-top: 70px;
-            padding-bottom: 200px;
+            padding-top: 100px;
+            padding-bottom: 180px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 20px;
+            gap: 16px;
         }
 
         .image-selector {
             display: flex;
-            gap: 10px;
-            padding: 10px;
+            gap: 8px;
+            padding: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
         }
 
         .image-selector button {
-            padding: 8px 16px;
+            padding: 8px 14px;
             background: var(--bg-card);
             border: 2px solid #444;
             border-radius: var(--border-radius);
             color: var(--text-primary);
             cursor: pointer;
             transition: all var(--transition-speed);
+            font-size: 12px;
+        }
+
+        .image-selector button:hover {
+            background: var(--bg-hover);
         }
 
         .image-selector button.active {
-            border-color: var(--neon-music);
-            background: rgba(255, 0, 255, 0.2);
+            border-color: var(--neon-must);
+            background: rgba(255, 0, 255, 0.15);
         }
 
         .image-wrapper {
             position: relative;
             width: 95%;
-            max-width: 1200px;
+            max-width: 1000px;
             margin: 0 auto;
         }
 
@@ -324,7 +377,7 @@
             height: auto;
             display: block;
             border-radius: var(--border-radius);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.6);
         }
 
         .overlay-container {
@@ -341,7 +394,7 @@
            ============================================ */
         .highlight {
             position: absolute;
-            border-radius: 6px;
+            border-radius: 4px;
             cursor: pointer;
             pointer-events: auto;
             opacity: 0;
@@ -354,26 +407,27 @@
             transform: scale(1);
         }
 
-        .highlight.music {
-            background: rgba(255, 0, 255, 0.25);
-            border: 2px solid var(--neon-music);
-            box-shadow: 0 0 15px var(--neon-music-glow), inset 0 0 15px var(--neon-music-glow);
+        .highlight.must {
+            background: rgba(255, 0, 255, 0.3);
+            border: 2px solid var(--neon-must);
+            box-shadow: 0 0 12px var(--neon-must-glow), inset 0 0 10px var(--neon-must-glow);
         }
 
-        .highlight.activities {
-            background: rgba(0, 255, 255, 0.25);
-            border: 2px solid var(--neon-activities);
-            box-shadow: 0 0 15px var(--neon-activities-glow), inset 0 0 15px var(--neon-activities-glow);
+        .highlight.nice {
+            background: rgba(0, 255, 255, 0.3);
+            border: 2px solid var(--neon-nice);
+            box-shadow: 0 0 12px var(--neon-nice-glow), inset 0 0 10px var(--neon-nice-glow);
         }
 
         .highlight.optional {
-            background: rgba(255, 255, 0, 0.2);
+            background: rgba(255, 255, 0, 0.25);
             border: 2px solid var(--neon-optional);
-            box-shadow: 0 0 15px var(--neon-optional-glow), inset 0 0 15px var(--neon-optional-glow);
+            box-shadow: 0 0 12px var(--neon-optional-glow), inset 0 0 10px var(--neon-optional-glow);
         }
 
         .highlight:hover {
             filter: brightness(1.3);
+            z-index: 10;
         }
 
         .highlight-label {
@@ -381,14 +435,15 @@
             bottom: 100%;
             left: 50%;
             transform: translateX(-50%);
-            padding: 4px 8px;
+            padding: 3px 6px;
             background: rgba(0, 0, 0, 0.9);
-            border-radius: 4px;
-            font-size: 11px;
+            border-radius: 3px;
+            font-size: 10px;
             white-space: nowrap;
             opacity: 0;
             transition: opacity var(--transition-speed);
             pointer-events: none;
+            margin-bottom: 2px;
         }
 
         .highlight:hover .highlight-label {
@@ -401,12 +456,12 @@
         .tooltip {
             position: fixed;
             z-index: 150;
-            padding: 12px 16px;
+            padding: 12px 14px;
             background: var(--bg-card);
             border: 1px solid #333;
             border-radius: var(--border-radius);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-            max-width: 280px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+            max-width: 260px;
             opacity: 0;
             pointer-events: none;
             transition: opacity var(--transition-speed);
@@ -417,23 +472,30 @@
         }
 
         .tooltip-title {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 600;
             margin-bottom: 6px;
         }
 
-        .tooltip-time, .tooltip-location, .tooltip-day {
-            font-size: 13px;
+        .tooltip-meta {
+            font-size: 12px;
             color: var(--text-secondary);
-            margin-bottom: 3px;
+            margin-bottom: 2px;
         }
 
-        .tooltip.music .tooltip-title {
-            color: var(--neon-music);
+        .tooltip-notes {
+            font-size: 11px;
+            color: #ffaa00;
+            margin-top: 6px;
+            font-style: italic;
         }
 
-        .tooltip.activities .tooltip-title {
-            color: var(--neon-activities);
+        .tooltip.must .tooltip-title {
+            color: var(--neon-must);
+        }
+
+        .tooltip.nice .tooltip-title {
+            color: var(--neon-nice);
         }
 
         .tooltip.optional .tooltip-title {
@@ -449,7 +511,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.85);
             z-index: 300;
             display: flex;
             align-items: center;
@@ -467,9 +529,9 @@
         .modal {
             background: var(--bg-card);
             border-radius: var(--border-radius);
-            padding: 24px;
+            padding: 20px;
             max-width: 90%;
-            width: 320px;
+            width: 300px;
             transform: translateY(20px);
             transition: transform var(--transition-speed);
         }
@@ -479,17 +541,17 @@
         }
 
         .modal-title {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 600;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
 
-        .modal.music .modal-title {
-            color: var(--neon-music);
+        .modal.must .modal-title {
+            color: var(--neon-must);
         }
 
-        .modal.activities .modal-title {
-            color: var(--neon-activities);
+        .modal.nice .modal-title {
+            color: var(--neon-nice);
         }
 
         .modal.optional .modal-title {
@@ -497,20 +559,30 @@
         }
 
         .modal-detail {
-            font-size: 15px;
+            font-size: 14px;
             color: var(--text-secondary);
-            margin-bottom: 8px;
+            margin-bottom: 6px;
+        }
+
+        .modal-notes {
+            font-size: 13px;
+            color: #ffaa00;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #333;
+            font-style: italic;
         }
 
         .modal-close {
-            margin-top: 16px;
-            padding: 10px 20px;
+            margin-top: 14px;
+            padding: 10px 18px;
             background: var(--bg-hover);
             border: 1px solid #444;
             border-radius: var(--border-radius);
             color: var(--text-primary);
             cursor: pointer;
             width: 100%;
+            font-size: 14px;
         }
 
         /* ============================================
@@ -522,34 +594,34 @@
             left: 0;
             right: 0;
             z-index: 90;
-            background: linear-gradient(to top, rgba(10, 10, 15, 0.98) 0%, rgba(10, 10, 15, 0.95) 80%, transparent 100%);
-            padding: 16px;
-            max-height: 180px;
+            background: linear-gradient(to top, rgba(10, 10, 18, 0.98) 0%, rgba(10, 10, 18, 0.95) 85%, transparent 100%);
+            padding: 14px 16px;
+            max-height: 160px;
             overflow-y: auto;
         }
 
         .event-list-title {
-            font-size: 12px;
+            font-size: 11px;
             text-transform: uppercase;
             letter-spacing: 1px;
             color: var(--text-secondary);
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
         .event-list {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
+            gap: 6px;
         }
 
         .event-chip {
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            padding: 6px 12px;
+            gap: 5px;
+            padding: 5px 10px;
             background: var(--bg-card);
-            border-radius: 20px;
-            font-size: 12px;
+            border-radius: 16px;
+            font-size: 11px;
             cursor: pointer;
             transition: all var(--transition-speed);
             border: 1px solid transparent;
@@ -559,12 +631,12 @@
             background: var(--bg-hover);
         }
 
-        .event-chip.music {
-            border-color: var(--neon-music);
+        .event-chip.must {
+            border-color: var(--neon-must);
         }
 
-        .event-chip.activities {
-            border-color: var(--neon-activities);
+        .event-chip.nice {
+            border-color: var(--neon-nice);
         }
 
         .event-chip.optional {
@@ -572,17 +644,17 @@
         }
 
         .event-chip-dot {
-            width: 8px;
-            height: 8px;
+            width: 6px;
+            height: 6px;
             border-radius: 50%;
         }
 
-        .event-chip.music .event-chip-dot {
-            background: var(--neon-music);
+        .event-chip.must .event-chip-dot {
+            background: var(--neon-must);
         }
 
-        .event-chip.activities .event-chip-dot {
-            background: var(--neon-activities);
+        .event-chip.nice .event-chip-dot {
+            background: var(--neon-nice);
         }
 
         .event-chip.optional .event-chip-dot {
@@ -591,7 +663,7 @@
 
         .event-chip-day {
             color: var(--text-secondary);
-            font-size: 10px;
+            font-size: 9px;
         }
 
         /* ============================================
@@ -599,7 +671,8 @@
            ============================================ */
         .no-image-placeholder {
             width: 100%;
-            aspect-ratio: 16/9;
+            aspect-ratio: 9/16;
+            max-height: 80vh;
             background: var(--bg-card);
             border: 2px dashed #444;
             border-radius: var(--border-radius);
@@ -615,11 +688,19 @@
         .no-image-placeholder h2 {
             margin-bottom: 10px;
             color: var(--text-primary);
+            font-size: 18px;
         }
 
         .no-image-placeholder p {
-            font-size: 14px;
-            max-width: 400px;
+            font-size: 13px;
+            max-width: 350px;
+        }
+
+        .no-image-placeholder code {
+            background: #000;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 11px;
         }
 
         /* ============================================
@@ -627,22 +708,31 @@
            ============================================ */
         @media (max-width: 600px) {
             .header {
-                padding: 10px;
+                padding: 8px 10px;
             }
 
             .toggle-btn {
-                padding: 6px 10px;
-                font-size: 12px;
+                padding: 5px 8px;
+                font-size: 10px;
+            }
+
+            .toggle-label {
+                font-size: 9px;
             }
 
             .legend {
-                font-size: 10px;
-                padding: 6px 10px;
+                font-size: 9px;
+                padding: 8px 10px;
             }
 
             .event-list-container {
-                max-height: 140px;
-                padding: 12px;
+                max-height: 130px;
+                padding: 10px 12px;
+            }
+
+            .event-chip {
+                padding: 4px 8px;
+                font-size: 10px;
             }
 
             .calibration-panel {
@@ -650,38 +740,63 @@
                 right: 16px;
                 left: 16px;
             }
+
+            .image-selector button {
+                padding: 6px 10px;
+                font-size: 11px;
+            }
+
+            .main-container {
+                padding-top: 115px;
+            }
         }
     </style>
 </head>
 <body>
     <!-- Header Controls -->
     <header class="header">
-        <div class="toggles">
-            <button class="toggle-btn active" data-category="music">
-                <span class="toggle-indicator"></span>
-                Music
-            </button>
-            <button class="toggle-btn active" data-category="activities">
-                <span class="toggle-indicator"></span>
-                Activities
-            </button>
-            <button class="toggle-btn" data-category="optional">
-                <span class="toggle-indicator"></span>
-                Optional
-            </button>
+        <div class="controls-left">
+            <div class="toggle-group">
+                <span class="toggle-label">Priority:</span>
+                <button class="toggle-btn active" data-priority="must">
+                    <span class="toggle-indicator"></span>
+                    Must See
+                </button>
+                <button class="toggle-btn active" data-priority="nice">
+                    <span class="toggle-indicator"></span>
+                    Nice
+                </button>
+                <button class="toggle-btn" data-priority="optional">
+                    <span class="toggle-indicator"></span>
+                    Optional
+                </button>
+            </div>
+            <div class="toggle-group">
+                <span class="toggle-label">Type:</span>
+                <button class="toggle-btn active" data-category="music">
+                    <span class="toggle-indicator"></span>
+                    Music
+                </button>
+                <button class="toggle-btn active" data-category="activity">
+                    <span class="toggle-indicator"></span>
+                    Activities
+                </button>
+            </div>
         </div>
         <div class="legend">
-            <div class="legend-item">
-                <div class="legend-color music"></div>
-                <span>Music</span>
-            </div>
-            <div class="legend-item">
-                <div class="legend-color activities"></div>
-                <span>Activities</span>
-            </div>
-            <div class="legend-item">
-                <div class="legend-color optional"></div>
-                <span>Optional</span>
+            <div class="legend-row">
+                <div class="legend-item">
+                    <div class="legend-color must"></div>
+                    <span>Must See</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color nice"></div>
+                    <span>Nice</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color optional"></div>
+                    <span>Optional</span>
+                </div>
             </div>
         </div>
     </header>
@@ -689,18 +804,20 @@
     <!-- Main Content -->
     <main class="main-container">
         <div class="image-selector">
-            <button class="active" data-image="1">Main Timetable</button>
-            <button data-image="2">Performers & Workshops</button>
+            <button data-image="1">Workshops</button>
+            <button class="active" data-image="2">Music Timetable</button>
+            <button data-image="3">Performers & Times</button>
         </div>
 
         <div class="image-wrapper" id="imageWrapper">
             <!-- Timetable image will be inserted here -->
             <div class="no-image-placeholder" id="placeholder">
-                <h2>Add Your Timetable Image</h2>
+                <h2>Add Your Timetable Images</h2>
                 <p>Place your festival timetable images in the <code>images/</code> folder:</p>
-                <p style="margin-top: 10px; font-family: monospace; font-size: 12px;">
-                    images/timetable-1.jpg<br>
-                    images/timetable-2.jpg
+                <p style="margin-top: 10px; font-family: monospace; font-size: 11px;">
+                    images/timetable-1.jpg (Workshops)<br>
+                    images/timetable-2.jpg (Music)<br>
+                    images/timetable-3.jpg (Performers)
                 </p>
             </div>
 
@@ -728,10 +845,11 @@
 
     <!-- Tooltip (Desktop) -->
     <div class="tooltip" id="tooltip">
-        <div class="tooltip-day"></div>
         <div class="tooltip-title"></div>
-        <div class="tooltip-time"></div>
-        <div class="tooltip-location"></div>
+        <div class="tooltip-meta tooltip-day"></div>
+        <div class="tooltip-meta tooltip-time"></div>
+        <div class="tooltip-meta tooltip-location"></div>
+        <div class="tooltip-notes"></div>
     </div>
 
     <!-- Modal (Mobile) -->
@@ -741,18 +859,19 @@
             <div class="modal-detail modal-day"></div>
             <div class="modal-detail modal-time"></div>
             <div class="modal-detail modal-location"></div>
+            <div class="modal-notes"></div>
             <button class="modal-close" id="modalClose">Close</button>
         </div>
     </div>
 
     <!-- Calibration Toggle -->
-    <button class="calibration-toggle" id="calibrationToggle">📐 Calibrate</button>
+    <button class="calibration-toggle" id="calibrationToggle">Calibrate</button>
 
     <!-- Calibration Panel -->
     <div class="calibration-panel" id="calibrationPanel">
         <h3>Calibration Mode</h3>
-        <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 10px;">
-            Click to get coordinates. Click and drag to draw a rectangle.
+        <p style="font-size: 11px; color: var(--text-secondary); margin-bottom: 8px;">
+            Click to get coordinates. Click + drag for rectangle.
         </p>
         <div class="calibration-output" id="calibrationOutput">Click on the image...</div>
         <button class="calibration-btn" id="copyBtn">Copy</button>
@@ -764,18 +883,19 @@
            Configuration & State
            ============================================ */
         const CONFIG = {
-            // Image paths - update these with your actual images
             images: {
-                1: 'images/timetable-1.jpg',
-                2: 'images/timetable-2.jpg'
+                1: 'images/timetable-1.jpg',  // Workshops
+                2: 'images/timetable-2.jpg',  // Music timetable
+                3: 'images/timetable-3.jpg'   // Performers & times
             },
             eventsJsonPath: 'events.json'
         };
 
         const state = {
-            currentImage: 1,
+            currentImage: 2,  // Start on music timetable
             events: [],
-            activeCategories: new Set(['music', 'activities']),
+            activePriorities: new Set(['must', 'nice']),
+            activeCategories: new Set(['music', 'activity']),
             calibrationMode: false,
             isDragging: false,
             dragStart: null,
@@ -810,47 +930,17 @@
            ============================================ */
         async function loadEvents() {
             try {
-                const response = await fetch(CONFIG.eventsJsonPath);
+                const response = await fetch(CONFIG.eventsJsonPath + '?t=' + Date.now());
                 if (!response.ok) throw new Error('Events file not found');
                 state.events = await response.json();
                 renderHighlights();
                 renderEventList();
             } catch (error) {
                 console.warn('Could not load events.json:', error.message);
-                // Use embedded fallback data
-                state.events = getDefaultEvents();
+                state.events = [];
                 renderHighlights();
                 renderEventList();
             }
-        }
-
-        function getDefaultEvents() {
-            // Default events as specified in requirements
-            return [
-                // Music - Friday
-                { id: 1, name: "Pitch Black", category: "music", day: "Friday", time: "9:30pm - 11:00pm", location: "Nova Grove", image: 1, x: 10, y: 10, width: 15, height: 8 },
-                { id: 2, name: "Paige Julia", category: "music", day: "Friday", time: "11:00pm - 12:30am", location: "Nova Grove", image: 1, x: 10, y: 20, width: 15, height: 8 },
-
-                // Music - Saturday
-                { id: 3, name: "Ace Ventura", category: "music", day: "Saturday", time: "4:30pm - 7:30pm", location: "Astral Arena", image: 1, x: 30, y: 10, width: 15, height: 8 },
-                { id: 4, name: "Optimus Grime", category: "music", day: "Saturday", time: "12:00am - 2:00pm Sun", location: "Nova Grove", image: 1, x: 30, y: 20, width: 15, height: 8 },
-
-                // Music - Sunday
-                { id: 5, name: "Ajja", category: "music", day: "Sunday", time: "7:30pm - 10:00pm", location: "Astral Arena", image: 1, x: 50, y: 10, width: 15, height: 8 },
-
-                // Activities - Saturday
-                { id: 6, name: "Slow Flow Yoga", category: "activities", day: "Saturday", time: "9:00am", location: "Cosmic Cove", image: 2, x: 10, y: 30, width: 12, height: 6 },
-                { id: 7, name: "Inner Dimensions with Psyc", category: "activities", day: "Saturday", time: "11:00am", location: "Cosmic Cove", image: 2, x: 10, y: 38, width: 12, height: 6 },
-                { id: 8, name: "Fire and Rhythms", category: "activities", day: "Saturday", time: "8:30pm", location: "Workshop area", image: 2, x: 10, y: 46, width: 12, height: 6 },
-                { id: 9, name: "Juggling", category: "activities", day: "Saturday", time: "11:00am", location: "Fire and Flow", image: 2, x: 25, y: 30, width: 12, height: 6 },
-                { id: 10, name: "Poi", category: "activities", day: "Saturday", time: "12:00pm - 12:15pm", location: "Fire and Flow", image: 2, x: 25, y: 38, width: 12, height: 6 },
-
-                // Activities - Sunday
-                { id: 11, name: "Breathwork or Yoga", category: "activities", day: "Sunday", time: "9:00am", location: "TBD", image: 2, x: 40, y: 30, width: 12, height: 6 },
-                { id: 12, name: "Breathwork or Yoga", category: "activities", day: "Sunday", time: "10:30am", location: "TBD", image: 2, x: 40, y: 38, width: 12, height: 6 },
-                { id: 13, name: "Inner Dimensions", category: "activities", day: "Sunday", time: "12:00pm", location: "TBD", image: 2, x: 40, y: 46, width: 12, height: 6 },
-                { id: 14, name: "Fans", category: "activities", day: "Sunday", time: "2:45pm", location: "Fire and Flow", image: 2, x: 55, y: 30, width: 12, height: 6 }
-            ];
         }
 
         /* ============================================
@@ -895,15 +985,17 @@
             const existingHighlights = elements.overlayContainer.querySelectorAll('.highlight');
             existingHighlights.forEach(h => h.remove());
 
-            // Filter events for current image
+            // Filter events for current image and active filters
             const visibleEvents = state.events.filter(event =>
                 event.image === state.currentImage &&
-                state.activeCategories.has(event.category)
+                state.activePriorities.has(event.priority) &&
+                state.activeCategories.has(event.category) &&
+                event.x !== null && event.y !== null
             );
 
             visibleEvents.forEach(event => {
                 const highlight = document.createElement('div');
-                highlight.className = `highlight ${event.category}`;
+                highlight.className = `highlight ${event.priority}`;
                 highlight.style.left = `${event.x}%`;
                 highlight.style.top = `${event.y}%`;
                 highlight.style.width = `${event.width}%`;
@@ -934,9 +1026,12 @@
             elements.eventList.innerHTML = '';
 
             // Sort events by day order then time
-            const dayOrder = { 'Friday': 1, 'Saturday': 2, 'Sunday': 3 };
+            const dayOrder = { 'Friday': 1, 'Saturday': 2, 'Sunday': 3, 'Monday': 4 };
             const sortedEvents = [...state.events]
-                .filter(event => state.activeCategories.has(event.category))
+                .filter(event =>
+                    state.activePriorities.has(event.priority) &&
+                    state.activeCategories.has(event.category)
+                )
                 .sort((a, b) => {
                     const dayDiff = (dayOrder[a.day] || 99) - (dayOrder[b.day] || 99);
                     if (dayDiff !== 0) return dayDiff;
@@ -945,7 +1040,7 @@
 
             sortedEvents.forEach(event => {
                 const chip = document.createElement('div');
-                chip.className = `event-chip ${event.category}`;
+                chip.className = `event-chip ${event.priority}`;
                 chip.innerHTML = `
                     <span class="event-chip-dot"></span>
                     <span class="event-chip-day">${event.day.substring(0, 3)}</span>
@@ -969,11 +1064,19 @@
             if (state.isMobile || state.calibrationMode) return;
 
             const tooltip = elements.tooltip;
-            tooltip.className = `tooltip ${event.category}`;
-            tooltip.querySelector('.tooltip-day').textContent = event.day;
+            tooltip.className = `tooltip ${event.priority}`;
             tooltip.querySelector('.tooltip-title').textContent = event.name;
-            tooltip.querySelector('.tooltip-time').textContent = `🕐 ${event.time}`;
-            tooltip.querySelector('.tooltip-location').textContent = `📍 ${event.location}`;
+            tooltip.querySelector('.tooltip-day').textContent = `${event.day}`;
+            tooltip.querySelector('.tooltip-time').textContent = `${event.time}`;
+            tooltip.querySelector('.tooltip-location').textContent = `${event.location}`;
+
+            const notesEl = tooltip.querySelector('.tooltip-notes');
+            if (event.notes) {
+                notesEl.textContent = event.notes;
+                notesEl.style.display = 'block';
+            } else {
+                notesEl.style.display = 'none';
+            }
 
             // Position tooltip
             const rect = e.target.getBoundingClientRect();
@@ -981,12 +1084,13 @@
             let top = rect.top;
 
             // Keep on screen
-            if (left + 280 > window.innerWidth) {
-                left = rect.left - 290;
+            if (left + 260 > window.innerWidth) {
+                left = rect.left - 270;
             }
-            if (top + 150 > window.innerHeight) {
-                top = window.innerHeight - 160;
+            if (top + 140 > window.innerHeight) {
+                top = window.innerHeight - 150;
             }
+            if (left < 10) left = 10;
 
             tooltip.style.left = `${left}px`;
             tooltip.style.top = `${top}px`;
@@ -999,11 +1103,20 @@
 
         function showModal(event) {
             const modal = elements.modal;
-            modal.className = `modal ${event.category}`;
+            modal.className = `modal ${event.priority}`;
             modal.querySelector('.modal-title').textContent = event.name;
-            modal.querySelector('.modal-day').textContent = `📅 ${event.day}`;
-            modal.querySelector('.modal-time').textContent = `🕐 ${event.time}`;
-            modal.querySelector('.modal-location').textContent = `📍 ${event.location}`;
+            modal.querySelector('.modal-day').textContent = `${event.day}`;
+            modal.querySelector('.modal-time').textContent = `${event.time}`;
+            modal.querySelector('.modal-location').textContent = `${event.location}`;
+
+            const notesEl = modal.querySelector('.modal-notes');
+            if (event.notes) {
+                notesEl.textContent = event.notes;
+                notesEl.style.display = 'block';
+            } else {
+                notesEl.style.display = 'none';
+            }
+
             elements.modalOverlay.classList.add('visible');
         }
 
@@ -1019,10 +1132,28 @@
         }
 
         /* ============================================
-           Category Toggles
+           Toggle Setup
            ============================================ */
         function setupToggles() {
-            document.querySelectorAll('.toggle-btn').forEach(btn => {
+            // Priority toggles
+            document.querySelectorAll('.toggle-btn[data-priority]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const priority = btn.dataset.priority;
+                    btn.classList.toggle('active');
+
+                    if (btn.classList.contains('active')) {
+                        state.activePriorities.add(priority);
+                    } else {
+                        state.activePriorities.delete(priority);
+                    }
+
+                    renderHighlights();
+                    renderEventList();
+                });
+            });
+
+            // Category toggles
+            document.querySelectorAll('.toggle-btn[data-category]').forEach(btn => {
                 btn.addEventListener('click', () => {
                     const category = btn.dataset.category;
                     btn.classList.toggle('active');
@@ -1085,8 +1216,8 @@
             elements.overlayContainer.addEventListener('mouseleave', handleCalibrationEnd);
 
             // Touch events for mobile calibration
-            elements.overlayContainer.addEventListener('touchstart', handleCalibrationStart);
-            elements.overlayContainer.addEventListener('touchmove', handleCalibrationMove);
+            elements.overlayContainer.addEventListener('touchstart', handleCalibrationStart, { passive: false });
+            elements.overlayContainer.addEventListener('touchmove', handleCalibrationMove, { passive: false });
             elements.overlayContainer.addEventListener('touchend', handleCalibrationEnd);
         }
 
@@ -1094,9 +1225,12 @@
             const rect = elements.overlayContainer.getBoundingClientRect();
             let clientX, clientY;
 
-            if (e.touches) {
+            if (e.touches && e.touches.length > 0) {
                 clientX = e.touches[0].clientX;
                 clientY = e.touches[0].clientY;
+            } else if (e.changedTouches && e.changedTouches.length > 0) {
+                clientX = e.changedTouches[0].clientX;
+                clientY = e.changedTouches[0].clientY;
             } else {
                 clientX = e.clientX;
                 clientY = e.clientY;
@@ -1136,6 +1270,7 @@
             elements.crosshairV.style.left = `${coords.xPercent}%`;
 
             if (state.isDragging && state.dragStart) {
+                e.preventDefault();
                 const startX = parseFloat(state.dragStart.xPercent);
                 const startY = parseFloat(state.dragStart.yPercent);
                 const currentX = parseFloat(coords.xPercent);
@@ -1156,7 +1291,7 @@
         function handleCalibrationEnd(e) {
             if (!state.calibrationMode || !state.isDragging) return;
 
-            const coords = e.type === 'mouseleave' ? state.dragStart : getEventCoords(e.changedTouches ? e.changedTouches[0] : e);
+            const coords = getEventCoords(e);
 
             const startX = parseFloat(state.dragStart.xPercent);
             const startY = parseFloat(state.dragStart.yPercent);
@@ -1167,14 +1302,14 @@
             const height = Math.abs(endY - startY);
 
             let output;
-            if (width < 1 && height < 1) {
+            if (width < 0.5 && height < 0.5) {
                 // Single click
-                output = `x: ${startX}, y: ${startY}`;
+                output = `"x": ${startX}, "y": ${startY}`;
             } else {
                 // Rectangle drag
                 const x = Math.min(startX, endX).toFixed(2);
                 const y = Math.min(startY, endY).toFixed(2);
-                output = `x: ${x}, y: ${y}, width: ${width.toFixed(2)}, height: ${height.toFixed(2)}`;
+                output = `"x": ${x}, "y": ${y}, "width": ${width.toFixed(2)}, "height": ${height.toFixed(2)}`;
             }
 
             elements.calibrationOutput.textContent = output;
@@ -1197,6 +1332,24 @@
             state.isMobile = window.matchMedia('(max-width: 768px)').matches;
         });
 
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                hideModal();
+                if (state.calibrationMode) {
+                    state.calibrationMode = false;
+                    elements.calibrationToggle.classList.remove('active');
+                    elements.calibrationPanel.classList.remove('visible');
+                    elements.crosshair.classList.remove('visible');
+                    elements.imageWrapper.style.cursor = '';
+                }
+            }
+            // Number keys to switch images
+            if (e.key === '1') loadImage(1);
+            if (e.key === '2') loadImage(2);
+            if (e.key === '3') loadImage(3);
+        });
+
         /* ============================================
            Initialize
            ============================================ */
@@ -1204,7 +1357,7 @@
             setupToggles();
             setupImageSelector();
             setupCalibration();
-            loadImage(1);
+            loadImage(2);  // Start on music timetable
             loadEvents();
         }
 
